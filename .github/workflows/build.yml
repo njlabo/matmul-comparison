@@ -23,7 +23,7 @@ jobs:
         continue-on-error: true
         run: |
           brew update
-          brew install libomp
+          brew install llvm libomp
 
       - name: Set up Python 3.10
         uses: actions/setup-python@v5
@@ -38,6 +38,9 @@ jobs:
       - name: Build
         id: make_build
         run: |
+          export PATH="/usr/local/opt/llvm/bin:$PATH"
+          export LDFLAGS="-L/usr/local/opt/llvm/lib"
+          export CPPFLAGS="-I/usr/local/opt/llvm/include"
           make compile
 
       - name: Run Tests
